@@ -1,0 +1,17 @@
+{
+  "name": "gameoflife",
+  "displayName": "gameoflife",
+  "expo": {
+    "name": "gameoflife",
+    "slug": "gameoflife",
+    "version": "1.0.0",
+    "platforms": [
+      "ios",
+      "android",
+      "web"
+    ],
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}
