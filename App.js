@@ -5,6 +5,14 @@ import SplashScreen from './screens/SpashScreen';
 import useInterval from './components/IntervalHook';
 import 'react-native-gesture-handler';
 
+// POST-COMMIT TO DO LIST:
+// - touchable cells to set initial state
+// - text to display current generation
+// - button to stop/start the game
+// - button to clear the grid
+// - utilize double buffering to calculate next state ahead of time
+// - check corner neighbors of each cell
+
 const App = () => {
   const [grid, setGrid] = useState([]);
   const gridCount = 40; // update to change size of grid
@@ -78,15 +86,14 @@ const App = () => {
     setGrid(newGrid);
   };
 
-  // the runGame() function traverses each cell in the grid
-  // checking their neighbors and updating each cell accordingly
+  // the runGame() function is a helper to call the previous two functions
   const runGame = () => {
     checkNeighbors();
     updateGrid();
   };
 
-  // this useEffect() will run one time when mounting the app
-  // and will create the initial {grid} state to build a grid
+  // this useEffect() will run once when mounting the app
+  // and will create the initial state to build our grid
   useEffect(() => {
     let initialGrid = createGrid();
     setGrid(initialGrid);
