@@ -19,7 +19,7 @@ const App = () => {
 
   // the createGrid() function creates a new array using nested for loops
   // we will later map over this array to create a grid via react-native-easy-grid
-  // the initial array sets each cell to have zero neighbor cells (n: 0)
+  // the initial array sets each cell to have zero neighbor cells
   const createGrid = () => {
     let initialGrid = new Array(gridCount);
     for (i = 0; i < gridCount; i++) {
@@ -37,7 +37,7 @@ const App = () => {
   };
 
   // the checkNeighbors() function traverses each cell in the grid
-  // to check their number of neighbors, then increments the 'n'
+  // to check their number of neighbors, then increments the 'neighbors'
   // attribute for each cell that has neighbor cells in the grid
   const checkNeighbors = () => {
     let oldGrid = grid;
@@ -62,7 +62,7 @@ const App = () => {
     let newGrid = createGrid();
     for (let i = 0; i < gridCount; i++) {
       for (let j = 0; j < gridCount; j++) {
-        grid[i][j] = { cell: 0, n: 0 };
+        grid[i][j] = { cell: 0, neighbors: 0 };
       }
     }
     for (x = 1; x < gridCount - 1; x++) {
