@@ -29,7 +29,7 @@ const App = () => {
       for (y = 0; y < gridCount; y++) {
         initialGrid[x][y] = {
           cell: Math.floor(Math.random() * 2),
-          n: 0,
+          neighbors: 0,
         };
       }
     }
@@ -45,10 +45,10 @@ const App = () => {
       for (j = 1; j < gridCount - 1; j++) {
         for (k = -1; k < 2; k++) {
           for (l = -1; l < 2; l++) {
-            oldGrid[i][j].n += oldGrid[i + k][j + l].cell;
+            oldGrid[i][j].neighbors += oldGrid[i + k][j + l].cell;
           }
         }
-        oldGrid[i][j].n -= oldGrid[i][j].cell;
+        oldGrid[i][j].neighbors -= oldGrid[i][j].cell;
       }
     }
     setGrid(oldGrid);
@@ -67,15 +67,15 @@ const App = () => {
     }
     for (x = 1; x < gridCount - 1; x++) {
       for (y = 1; y < gridCount - 1; y++) {
-        if (oldGrid[x][y].cell == 1 && oldGrid[x][y].n < 2) {
+        if (oldGrid[x][y].cell == 1 && oldGrid[x][y].neighbors < 2) {
           newGrid[x][y].cell = 0;
-        } else if (oldGrid[x][y].cell == 1 && oldGrid[x][y].n > 3) {
+        } else if (oldGrid[x][y].cell == 1 && oldGrid[x][y].neighbors > 3) {
           newGrid[x][y].cell = 0;
-        } else if (oldGrid[x][y].cell == 0 && oldGrid[x][y].n == 3) {
+        } else if (oldGrid[x][y].cell == 0 && oldGrid[x][y].neighbors == 3) {
           newGrid[x][y].cell = 1;
         } else if (
           oldGrid[x][y].cell == 1 &&
-          (oldGrid[x][y].n == 3 || oldGrid[x][y].n == 2)
+          (oldGrid[x][y].neighbors == 3 || oldGrid[x][y].neighbors == 2)
         ) {
           newGrid[x][y].cell = 1;
         } else {
