@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 
 // custom hook similar to setInterval() but its arguments are dynamic
 // the hook sets up an interval then clears it after unmounting
