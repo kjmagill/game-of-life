@@ -2,8 +2,8 @@
 
 This is my take on John Conway's infamous [Game of Life](https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life), bootstrapped with [Expo](https://docs.expo.io/) and written in JavaScript with [React Native Elements](https://react-native-elements.github.io/react-native-elements/).
 
-[![MIT](https://img.shields.io/packagist/l/doctrine/orm.svg)](https://opensource.org/licenses/MIT)
 [![runs with expo](https://img.shields.io/badge/Runs%20with%20Expo-000.svg?style=flat-square&logo=EXPO&labelColor=f3f3f3&logoColor=000)](https://docs.expo.io/)
+[![MIT](https://img.shields.io/packagist/l/doctrine/orm.svg)](https://opensource.org/licenses/MIT)
 [![GitHub contributors](https://img.shields.io/github/contributors/kjmagill/game-of-life)](https://github.com/kjmagill/game-of-life/commits/)
 [![github-last-commit-image](https://img.shields.io/github/last-commit/kjmagill/game-of-life.svg?style=flat-square)](https://github.com/kjmagill/game-of-life/commits/)
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
