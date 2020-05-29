@@ -6,7 +6,6 @@ This is my take on John Conway's infamous [Game of Life](https://en.wikipedia.or
 [![runs with expo](https://img.shields.io/badge/Runs%20with%20Expo-000.svg?style=flat-square&logo=EXPO&labelColor=f3f3f3&logoColor=000)](https://docs.expo.io/)
 [![GitHub contributors](https://img.shields.io/github/contributors/kjmagill/game-of-life)](https://github.com/kjmagill/game-of-life/commits/)
 [![github-last-commit-image](https://img.shields.io/github/last-commit/kjmagill/game-of-life.svg?style=flat-square)](https://github.com/kjmagill/game-of-life/commits/)
-[![github-commit-activity-image](https://img.shields.io/github/commit-activity/m/kjmagill/game-of-life.svg?style=flat-square)](https://github.com/kjmagill/game-of-life/commits/)
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
 
 ## Table of Contents
