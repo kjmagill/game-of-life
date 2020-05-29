@@ -12,8 +12,8 @@ import {
 } from 'react-native';
 import Onboarding from 'react-native-onboarding-swiper';
 import NumericInput from 'react-native-numeric-input';
-import SplashScreen from './screens/SpashScreen';
-import useInterval from './components/IntervalHook';
+import SplashScreen from './screens/SpashScreen.js';
+import useInterval from './components/IntervalHook.js';
 
 const App = () => {
   // sets the number of rows/columns in the square grid
@@ -150,20 +150,20 @@ const App = () => {
       pages={[
         {
           backgroundColor: '#FFF',
-          image: <Image source={require('./assets/images/gol_icon_2.png')} />,
+          image: <Image source={'./assets/images/gol_icon_2.png'} />,
           title: "Welcome to my take on Conway's Game of Life",
           subtitle: 'Created with JavaScript and Expo (React Native)',
         },
         {
           backgroundColor: '#FE6E58',
-          image: <Image source={require('./assets/images/pawn.png')} />,
+          image: <Image source={'./assets/images/pawn.png'} />,
           title: 'An Introduction',
           subtitle:
             'The universe of the Game of Life is an infinite two-dimensional orthogonal grid of square cells, each of which is in one of two possible states, alive or dead. Every cell interacts with its eight neighbours, which are the cells that are horizontally, vertically, or diagonally adjacent. At each step in time, the following transitions occur:',
         },
         {
           backgroundColor: '#999',
-          image: <Image source={require('./assets/images/checklist.png')} />,
+          image: <Image source={'./assets/images/checklist.png'} />,
           title: 'Rules of the Game:',
           subtitle:
             '1) Any live cell with fewer than two live neighbours dies, as if caused by under-population. \n2) Any live cell with two or three live neighbours lives on to the next generation. \n3) Any live cell with more than three live neighbours dies, as if by overcrowding. \n4) Any dead cell with exactly three live neighbours becomes a live cell, as if by reproduction.',
