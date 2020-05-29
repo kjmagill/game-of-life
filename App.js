@@ -18,7 +18,7 @@ import useInterval from './components/IntervalHook';
 const App = () => {
   // sets the number of rows/columns in the square grid
   const gridCount = 50;
-  // stores the nested arrays of objects which represent each cell in the grid
+  // stores the array of nested arrays of objects which represent the grid
   const [grid, setGrid] = useState([]);
   // stores a count of the game's generations
   const [genCount, setGenCount] = useState(0);
@@ -31,7 +31,7 @@ const App = () => {
 
   // creates a new array containing nested arrays of objects (representing cells)
   // each cell's value is initialized at a random # between 0 and less-than-1
-  // each cell's count of neighbor cells (.neighbors) is initialized at 0
+  // each cell's count of neighbor cells is initialized at 0
   const createGrid = () => {
     let initialGrid = new Array(gridCount);
     for (i = 0; i < gridCount; i++) {
@@ -49,7 +49,7 @@ const App = () => {
   };
 
   // traverses each cell in the grid to check its number of neighbors, then
-  // then increments the cell's .neighbor count by 1 for each neighbor cell
+  // then increments the cell's neighbor count by 1 for each neighbor cell
   const checkNeighbors = () => {
     let oldGrid = grid;
     for (i = 1; i < gridCount - 1; i++) {
@@ -75,22 +75,25 @@ const App = () => {
         grid[i][j] = { cell: 0, neighbors: 0 };
       }
     }
+    // CHECK ALL CELLS IN THE GRID AGAINST THE RULES OF THE GAME
     for (x = 1; x < gridCount - 1; x++) {
       for (y = 1; y < gridCount - 1; y++) {
-        // CONWAY'S GAME OF LIFE RULES:
         // if the current cell is alive and has less than two neighbors, kill it
         if (oldGrid[x][y].cell == 1 && oldGrid[x][y].neighbors < 2) {
           newGrid[x][y].cell = 0;
-          // if the current cell is alive and has less than two neighbors, kill it
+          // if the current cell is alive & has less than two neighbors, kill it
         } else if (oldGrid[x][y].cell == 1 && oldGrid[x][y].neighbors > 3) {
           newGrid[x][y].cell = 0;
+          // if the current cell is dead & has three neighbors, bring it back to life
         } else if (oldGrid[x][y].cell == 0 && oldGrid[x][y].neighbors == 3) {
           newGrid[x][y].cell = 1;
+          // if the current cell is alive & either has 2 or 3 neighbors, keep it alive
         } else if (
           oldGrid[x][y].cell == 1 &&
           (oldGrid[x][y].neighbors == 3 || oldGrid[x][y].neighbors == 2)
         ) {
           newGrid[x][y].cell = 1;
+          // otherwise, set the current cell to the same value as its previous generation
         } else {
           newGrid[x][y].cell = oldGrid[x][y].cell;
         }
