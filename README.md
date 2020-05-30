@@ -1,6 +1,6 @@
 # Conway's Game of Life, a mobile-first Expo app
 
-This is my take on John Conway's infamous [Game of Life](https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life), bootstrapped with [Expo](https://docs.expo.io/) and written in JavaScript with [React Native Elements](https://react-native-elements.github.io/react-native-elements/).
+This is my take on John Conway's infamous [Game of Life](https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life), bootstrapped with [Expo](https://docs.expo.io/) and written in JavaScript with [React Native components](https://github.com/facebook/react-native) and [React Native Elements](https://react-native-elements.github.io/react-native-elements/).
 
 ![Conway's Game of Life](./assets/images/gol_logo_2.png)
 

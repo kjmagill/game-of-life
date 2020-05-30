@@ -3,17 +3,21 @@ import React, { useState, useEffect } from 'react';
 import {
   Alert,
   Button,
-  Header,
   Image,
   FlatList,
   StyleSheet,
   Text,
+  TextInput,
   TouchableOpacity,
+  View,
 } from 'react-native';
+import { Header, ListItem } from 'react-native-elements';
 import Onboarding from 'react-native-onboarding-swiper';
-import NumericInput from 'react-native-numeric-input';
-import SplashScreen from './screens/SpashScreen.js';
+// import NumericInput from 'react-native-numeric-input';
 import useInterval from './components/IntervalHook.js';
+import rulesImg from './assets/images/checklist.png';
+import pawnImg from './assets/images/pawn.png';
+import gameLogo from './assets/images/gol_logo_2.png';
 
 const App = () => {
   // sets the number of rows/columns in the square grid
@@ -32,7 +36,7 @@ const App = () => {
   // creates a new array containing nested arrays of objects (representing cells)
   // each cell's value is initialized at a random # between 0 and less-than-1
   // each cell's count of neighbor cells is initialized at 0
-  const createGrid = () => {
+  const createGridArr = () => {
     let initialGrid = new Array(gridCount);
     for (i = 0; i < gridCount; i++) {
       initialGrid[i] = new Array(gridCount);
@@ -42,11 +46,18 @@ const App = () => {
         initialGrid[x][y] = {
           cell: Math.floor(Math.random() * 2),
           neighbors: 0,
+          key: Math.floor(Math.random() * 2),
         };
       }
     }
     return initialGrid;
   };
+
+  // runs once when mounting the app and creates the initial empty grid
+  useEffect(() => {
+    let initialGrid = createGridArr();
+    setGrid(initialGrid);
+  }, []);
 
   // traverses each cell in the grid to check its number of neighbors, then
   // then increments the cell's neighbor count by 1 for each neighbor cell
@@ -69,7 +80,7 @@ const App = () => {
   // of cells based on the rules of Conway's Game of Life
   const updateGrid = () => {
     let oldGrid = grid;
-    let newGrid = createGrid();
+    let newGrid = createGridArr();
     for (let i = 0; i < gridCount; i++) {
       for (let j = 0; j < gridCount; j++) {
         grid[i][j] = { cell: 0, neighbors: 0 };
@@ -100,7 +111,7 @@ const App = () => {
       }
     }
     setGrid(newGrid);
-    setGenCount(genCount + 1);
+    setGenCount(Number(genCount) + 1);
   };
 
   // the runGame() function is a helper to call the previous two functions
@@ -108,75 +119,6 @@ const App = () => {
     checkNeighbors();
     updateGrid();
   };
-
-  // when a user touches a cell, update its value in state
-  // which flips the cell's background color in the grid
-  const cellWasTouched = (cellKey) => {
-    if ([cellKey].cell == 1) {
-      setGrid(([cellKey].cell = 0));
-    } else {
-      setGrid(([cellKey].cell = 1));
-    }
-  };
-
-  // handles clicking of the Pause button which toggles the {isRunning} state
-  const handlePauseButton = () => {
-    if (isRunning == true) {
-      setIsRunning(false);
-    } else {
-      Alert(
-        "Conway's Game of Life is not currently running. \n \nSelect an initial state then press 'Run Game' to begin."
-      );
-    }
-  };
-
-  // handles clicking of the Clear button which sets the {isRunning} state
-  // to false and invokes the newGrid() function to start with an empty grid
-  const handleClearButton = () => {
-    setIsRunning(false);
-  };
-
-  // handles clicking of the Review Rules button which opens the onboarding
-  // flow at its third page, displaying the rules of the game
-  const handleRulesButton = () => {
-    onboardingFlow({ skipToPage: 3 });
-  };
-
-  // launches an onboarding modal with skip/next buttons and a swipe feature
-  // provides an intro to Conway's Game of Life, and the game's rules
-  const onboardingFlow = () => {
-    <Onboarding
-      onDone={setOnboardingComplete(true)}
-      pages={[
-        {
-          backgroundColor: '#FFF',
-          image: <Image source={'./assets/images/gol_icon_2.png'} />,
-          title: "Welcome to my take on Conway's Game of Life",
-          subtitle: 'Created with JavaScript and Expo (React Native)',
-        },
-        {
-          backgroundColor: '#FE6E58',
-          image: <Image source={'./assets/images/pawn.png'} />,
-          title: 'An Introduction',
-          subtitle:
-            'The universe of the Game of Life is an infinite two-dimensional orthogonal grid of square cells, each of which is in one of two possible states, alive or dead. Every cell interacts with its eight neighbours, which are the cells that are horizontally, vertically, or diagonally adjacent. At each step in time, the following transitions occur:',
-        },
-        {
-          backgroundColor: '#999',
-          image: <Image source={'./assets/images/checklist.png'} />,
-          title: 'Rules of the Game:',
-          subtitle:
-            '1) Any live cell with fewer than two live neighbours dies, as if caused by under-population. \n2) Any live cell with two or three live neighbours lives on to the next generation. \n3) Any live cell with more than three live neighbours dies, as if by overcrowding. \n4) Any dead cell with exactly three live neighbours becomes a live cell, as if by reproduction.',
-        },
-      ]}
-    />;
-  };
-
-  // runs once when mounting the app and creates the initial empty grid
-  useEffect(() => {
-    let initialGrid = createGrid();
-    setGrid(initialGrid);
-  }, []);
 
   // invokes the runGame() function repeatedly every {delay} milliseconds
   // if (isRunning == false), the repeated invocations will stop until true again
@@ -187,97 +129,240 @@ const App = () => {
     isRunning ? delay : null
   );
 
-  // return the splash screen until {grid} is updated with floating point ints via
-  // the createGrid() function, then run onboardingFlow() before rendering the game
-  if (grid == []) {
-    return <SplashScreen />;
-  } else {
-    if (onboardingComplete == false) {
-      onboardingFlow();
+  // when a user touches a cell, update its value in state
+  // which flips the cell's background color in the grid
+  const cellWasTouched = (cell) => {
+    if ([cell].cell == 1) {
+      setGrid(([cell].cell = 0));
     } else {
-      return (
-        <>
-          <Header
-            placement="left"
-            leftComponent={{ icon: 'menu', color: '#FFF' }}
-            centerComponent={{
-              text: "Conway's Game of Life",
-              style: styles.header,
-            }}
-            rightComponent={{ icon: 'info', color: '#FFF' }}
-          />
-
-          <FlatList
-            data={grid}
-            numColumns={gridCount}
-            renderItem={({ item }) => (
-              <TouchableOpacity
-                onPress={() => cellWasTouched(item.key)}
-                style={styles.cell}
-              />
-            )}
-          />
-
-          <Text>Generation: {generation}</Text>
-
-          <NumericInput
-            value={delay}
-            initValue={delay}
-            minValue={50}
-            onChange={(value) => setDelay({ value })}
-            totalWidth={240}
-            totalHeight={50}
-            iconSize={25}
-            step={100}
-            editable={true}
-            type="up-down"
-            valueType="integer"
-            rounded
-            textColor="#B0228C"
-            iconStyle={{ color: 'white' }}
-            rightButtonBackgroundColor="#EA3788"
-            leftButtonBackgroundColor="#E56B70"
-          />
-
-          <TextInput
-            placeholder="Change refresh delay (in milliseconds)"
-            underlineColorAndroid="transparent"
-            keyboardType={'numeric'}
-            style={styles.textInput}
-          />
-          <Button onPress={handlePauseButton} title="Pause" color="blue" />
-          <Button onPress={handleClearButton} title="Clear" color="red" />
-          <Button
-            onPress={handleRulesButton}
-            title="Review Rules"
-            color="black"
-          />
-        </>
-      );
+      setGrid(([cell].cell = 1));
     }
+  };
+
+  // handles clicking of the Pause button which toggles the {isRunning} state
+  const handlePauseButton = () => {
+    if (isRunning == true) {
+      setIsRunning(false);
+    } else {
+      setIsRunning(true);
+    }
+  };
+
+  // handles clicking of the Clear button which sets the {isRunning} state
+  // to false and invokes the newGrid() function to start with an empty grid
+  const handleClearButton = () => {
+    setIsRunning(false);
+    setGenCount(0);
+  };
+
+  // handles clicking of the Review Rules button which opens the onboarding
+  // flow at its third page, displaying the rules of the game
+  const handleRulesButton = () => {
+    setOnboardingComplete(false);
+    OnboardingFlow({ skipToPage: 3 });
+    setOnboardingComplete(true);
+  };
+
+  const handleDelayInput = (e) => {
+    setDelay(parseInt(e));
+  };
+
+  // launches an onboarding modal with skip/next buttons and a swipe feature
+  // provides an intro to Conway's Game of Life, and the game's rules
+  const OnboardingFlow = () => {
+    return (
+      <Onboarding
+        onSkip={setOnboardingComplete(true)}
+        onDone={setOnboardingComplete(true)}
+        // onDone={() => new Alert('Thanks for completing orientation!')}
+        pages={[
+          {
+            backgroundColor: '#FFF',
+            image: (
+              <Image
+                source={gameLogo}
+                style={{ aspectRatio: 2.2, resizeMode: 'contain' }}
+              />
+            ),
+            title: "Welcome to my interpretation of Conway's Game of Life",
+            subtitle: 'Created with JavaScript and Expo (React Native)',
+          },
+          {
+            backgroundColor: '#FE6E58',
+            image: (
+              <Image
+                source={pawnImg}
+                style={{ aspectRatio: 0.8, resizeMode: 'contain' }}
+              />
+            ),
+            title: 'An Introduction',
+            subtitle:
+              'The universe of the Game of Life is an infinite two-dimensional orthogonal grid of square cells, each of which is in one of two possible states, alive or dead. Every cell interacts with its eight neighbours, which are the cells that are horizontally, vertically, or diagonally adjacent. At each step in time, the following transitions occur:',
+          },
+          {
+            backgroundColor: '#999',
+            image: (
+              <Image
+                source={rulesImg}
+                style={{ aspectRatio: 2.2, resizeMode: 'contain' }}
+              />
+            ),
+            title: 'Rules of the Game:',
+            subtitle:
+              '1) Any live cell with fewer than two live neighbours dies, as if caused by under-population. \n2) Any live cell with two or three live neighbours lives on to the next generation. \n3) Any live cell with more than three live neighbours dies, as if by overcrowding. \n4) Any dead cell with exactly three live neighbours becomes a live cell, as if by reproduction.',
+          },
+        ]}
+      />
+    );
+  };
+
+  const Cell = () => {
+    return (
+      <TouchableOpacity
+        onPress={cellWasTouched()}
+        style={(styles.cell, value ? styles.alive : null)}
+      />
+    );
+  };
+
+  const BuildRow = (row, x) => {
+    row.map((cell, y) => <Cell key={`c${x}${y}`} value={cell.cell} />);
+  };
+
+  const BuildFullGrid = () => {
+    grid.map((row, x) => {
+      return <View key={`r${x}`}>{BuildRow(row, x)}</View>;
+    });
+  };
+
+  // return the splash screen until {grid} is updated with floating point ints via
+  // the createGridArr() function, then run OnboardingFlow() before rendering the game
+  if (grid == []) {
+    return 'Loading...';
+  }
+
+  if (onboardingComplete == false) {
+    return OnboardingFlow();
+  } else {
+    return (
+      <View style={styles.screenContainer}>
+        <Header
+          placement="center"
+          leftComponent={{ icon: 'menu', color: '#FFF' }}
+          centerComponent={{
+            text: "Conway's Game of Life",
+            style: styles.header,
+          }}
+          rightComponent={{ icon: 'info', color: '#FFF' }}
+        />
+
+        <Text style={styles.genText}>Generation: {genCount}</Text>
+
+        <View style={styles.gridContainer}>{BuildFullGrid()}</View>
+
+        {/* <NumericInput
+          value={delay}
+          initValue={parseInt(delay)}
+          minValue={50}
+          onChange={(newDelay) => setDelay({ newDelay })}
+          totalWidth={240}
+          totalHeight={50}
+          iconSize={25}
+          step={100}
+          editable={true}
+          rounded
+          textColor="black"
+          iconStyle={{ color: 'white' }}
+          rightButtonBackgroundColor="blue"
+          leftButtonBackgroundColor="blue"
+        /> */}
+
+        <TextInput
+          placeholder="Change refresh delay (in milliseconds)"
+          underlineColorAndroid="transparent"
+          keyboardType={'numeric'}
+          style={styles.textInput}
+          onChange={handleDelayInput}
+        />
+
+        <TouchableOpacity style={styles.buttonsContainer}>
+          <Button
+            style={styles.buttons}
+            onPress={handlePauseButton}
+            title={isRunning ? 'STOP GAME' : 'START GAME'}
+            color="#2C9AEB"
+          />
+          <Button
+            style={styles.buttons}
+            onPress={handleClearButton}
+            title="CLEAR GRID"
+            color="#000000"
+          />
+          <Button
+            style={styles.buttons}
+            onPress={handleRulesButton}
+            title="REVIEW THE RULES"
+            color="#8A8A8A"
+          />
+        </TouchableOpacity>
+      </View>
+    );
   }
 };
 
 const styles = StyleSheet.create({
+  screenContainer: {
+    flex: 1,
+    alignItems: 'stretch',
+  },
   header: {
     color: '#FFF',
+    fontSize: 20,
   },
-  container: {
-    flex: 1,
-    marginTop: 22,
+  genText: {
+    fontSize: 28,
+    marginTop: 5,
+    marginLeft: 125,
+  },
+  gridContainer: {
+    minHeight: 500,
   },
   cell: {
-    backgroundColor: item.cell == 1 ? '#850000' : '#FFF',
+    width: 5,
+    height: 5,
+    borderWidth: 0.4,
+    backgroundColor: '#000000',
     borderColor: '#000',
-    margin: 0,
+  },
+  alive: {
+    backgroundColor: '#FFFFFF',
   },
   textInput: {
-    padding: 5,
-    margin: 5,
+    padding: 14,
+    paddingTop: 24,
+    fontSize: 17,
+    textAlign: 'center',
+    shadowColor: 'grey',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.2,
+    shadowRadius: 2.84,
+    elevation: 5,
+  },
+  buttonsContainer: {
+    bottom: 0,
+  },
+  buttons: {
+    padding: 30,
   },
 });
 
 export default App;
+
+console.ignoredYellowBox = [
+  'react-devtools agent got no connection',
+  'Warning: Each',
+  'Warning: Failed',
+];
 
 // REMAINING TO DO LIST:
 // - add a modal when clicking Info icon to display intro and rules of game
